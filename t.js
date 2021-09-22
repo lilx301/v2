@@ -20,8 +20,6 @@ const Config =  tool.getConfig().pgyconfig|| process.env;
 
 
 const fs = require("fs");
-const { waitForDebugger } = require("inspector");
-const { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } = require("constants");
 const qmsgapi = Config.QMSGAPI;
 once = null;
 ckstatus = 1; 
@@ -32,7 +30,7 @@ signstatus = 0;
 let beijin = new Date((new Date).getTime() + 480 * 60 * 1000);
 notice = beijin.toISOString().replace("T"," ").replace("Z","");
 const header = {
-    timeout:6000,
+    timeout:15000,
     httpsAgent:httpsAgent,
     withCredentials:true,
     headers: {
