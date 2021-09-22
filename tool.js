@@ -5,45 +5,52 @@ const fs = require('fs')
 const keysalt = 'ec2a69afa5c57776b0dd9ed5f4f0438a'
 const ivSalt = 'lPc1lE3M'
 const zlib = require('zlib')
+const { lib } = require("crypto-js")
 
 
-function decrypt(message,key){
-    key = CryptoJS.HmacSHA256(key,keysalt).toString(CryptoJS.enc.Base64);
-    var k = CryptoJS.enc.Base64.parse(key);
-    var iv = CryptoJS.HmacSHA256(key,ivSalt)
+function decrypt(messageB64,key){
+    var message = messageB64; 
+    key = CryptoJS.HmacSHA256(key ,keysalt);
+    var k = key;
+    var iv = CryptoJS.HmacSHA256(key,ivSalt )
+    iv = CryptoJS.enc.Hex.parse(iv.toString(CryptoJS.enc.Hex).substr(0,32));
+
     let r = CryptoJS.AES.decrypt(message,k,{mode: CryptoJS.mode.CBC,
         padding: CryptoJS.pad.Pkcs7,iv:iv});
-    if(r.sigBytes > 0){
-        let resultb64 =  r.toString(CryptoJS.enc.Base64);
-        var buffResult = Buffer.from(resultb64,'base64');
-        if (buffResult.length > 32) {
-            buffResult = buffResult.slice(32);
-            if (buffResult.length) {
-                buffResult = zlib.gunzipSync(buffResult);
+    if(r.sigBytes > 32){
+        let  tmpResultString =  r.toString(CryptoJS.enc.Base64);
+        var buffResult = Buffer.from(tmpResultString,'base64');
+        var sha2Buffer = buffResult.slice(0,32);
+        var zipBuffer = buffResult.slice(32);  
+        if (zipBuffer.length > 0) {
+            
+            var zipWordArr =  CryptoJS.enc.Base64.parse(zipBuffer.toString("base64"));
+            var sha256Caculate  =  CryptoJS.SHA256(zipWordArr).toString(CryptoJS.enc.Hex).toLowerCase();
+            var sha22 =  sha2Buffer.toString('hex').toLowerCase() 
+            if (sha22 == sha256Caculate) {
+                buffResult = zlib.gunzipSync(zipBuffer);
                 return buffResult.toString('utf-8'); 
+            }else{
+                console.log('sha256 not fit');
             }
-               
         }
     }
     return null;
 }
 
 function encrypt(message,key){
-    key = CryptoJS.HmacSHA256(key,keysalt).toString(CryptoJS.enc.Base64);
+    key = CryptoJS.HmacSHA256(key,keysalt);
     var msgBuffer = Buffer.from(message,'utf-8');
-    msgBuffer = zlib.gzipSync(msgBuffer)
+    var msgZipBuffer = zlib.gzipSync(msgBuffer)
 
-    var sha2 = CryptoJS.SHA256(message).toString(CryptoJS.enc.Base64);
-    var buffSha2 = Buffer.from(sha2,'base64');
-    var bufferToEncrypt  = Buffer.concat([buffSha2,msgBuffer])
-
- 
-    var m = CryptoJS.enc.Base64.parse(bufferToEncrypt.toString('base64'));
+    var worderArrayOfZip =  CryptoJS.enc.Hex.parse(msgZipBuffer.toString('hex'));
+    var sha2 = CryptoJS.SHA256(worderArrayOfZip);
+    var m =  sha2.concat(worderArrayOfZip);
     var iv = CryptoJS.HmacSHA256(key,ivSalt)
-    var k = CryptoJS.enc.Base64.parse(key);
+    iv = CryptoJS.enc.Hex.parse(iv.toString(CryptoJS.enc.Hex).substr(0,32));
+    var k = key;
     let r =  CryptoJS.AES.encrypt(m ,k,{mode: CryptoJS.mode.CBC,
                     padding: CryptoJS.pad.Pkcs7,iv:iv});
-
     return r.toString();
 }
 
