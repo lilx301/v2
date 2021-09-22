@@ -1,0 +1,28 @@
+{
+  "name": "v2ex-auto-sign",
+  "version": "1.0.0",
+  "description": "v2ex 自动签到",
+  "main": "v2ex.js",
+  "license": "UNLICENSED",
+  "author": {
+    "name": "chegege"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "updates": "",
+  "contributes": {
+    "search": null
+  },
+  "homepage": "",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "crypto-js": "^4.0.0",
+    "qs": "^6.10.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "socks-proxy-agent": "^5.0.1"
+  }
+}

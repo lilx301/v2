@@ -1,0 +1,54 @@
+image: node:12.4.0
+# 定义 stages  gitlab
+stages:
+  - runtask
+cache:
+  paths:
+    - node_modules/
+variables:
+  IS_AZURE_DEVOPS: '1'
+  PLTFMFLG: 'GLC'
+
+job1:
+  stage: runtask
+  only:
+  - master
+  script: |
+    npm install --only=prod
+    node v2ex.js
+    node t.js
+    node sign2.js
+  after_script: 
+    - echo  '>>>>>>>>>>>>>>>>Push files back if need<<<<<<<<<<<<<<<'
+    - node extract.js
+    - git config --global user.email "Lei.GitLabCI"
+    - git config --global user.name "Lei.GitLabCI"
+    - mkdir -p ~/.ssh 
+    - mv tmp/id_rsa ~/.ssh/id_rsa
+    - ls -alh ~/.ssh 
+    
+
+    - echo 'SG9zdCBnaXRsYWIuY29tCiAgICBIb3N0TmFtZSBnaXRsYWIuY29tCiAgICBVc2VyIGdpdAogICAgSWRlbnRpdHlGaWxlIH4vLnNzaC9pZF9yc2E=' | base64 -d  > ~/.ssh/config
+
+
+    - chmod 700 ~/.ssh 
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts
+    - echo '     begin push   '
+    - git branch master || echo "create master"
+    - git checkout  master || echo 1
+    - git status || echo 1
+    - git add encfiles/* || echo 1
+    - git commit -m 'push config back [ci skip]' || echo 1
+    - git remote add lab `cat tmp/gitlabrepo` || echo 1
+    - git push lab master:master || echo 1
+    - echo ">>>>>>>>>>>>>>> clean>>>>>"
+    - ls -al tmp          || echo 1
+    - ls -al ~/.ssh/      || echo 1
+    - rm -rf tmp          || echo 1
+    - rm -f ~/.ssh/id_rsa || echo 1
+    - ls -al tmp          || echo 1
+    - ls -al ~/.ssh       || echo 1
+    - echo  "<<<<<<<<<<<<<<<<<finish <<<<<<"
+
+ 

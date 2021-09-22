@@ -1,0 +1,11 @@
+config-dont-push.json
+node_modules
+node_modules/
+node_modules/*
+id_rsa
+id_rsa.pub
+secretFiles
+secretFiles/* 
+tmp
+tmp/*
+test.js
