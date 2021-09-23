@@ -15,9 +15,7 @@ doSignTask:
   - master
   script: |
     npm install --only=prod
-    node v2ex.js
-    node t.js
-    node sign2.js
+    sh task.sh
   after_script: 
     - echo  '>>>>>>>>>>>>>>>>Push files back if need<<<<<<<<<<<<<<<'
     - node extract.js

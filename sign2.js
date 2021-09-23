@@ -50,17 +50,18 @@ async function getToken(){
 async function doTask(token,Config){
     console.log(Config['_'])
     var params = Config.body;
-    params.systemtime = Date.now();
+    params.systemtime =  Date.now();
     hashcode(params,Config);
     var Authorization ='Basic '+ Buffer.from(token).toString('base64');
     let z = await axios.get(Config.url + qs.stringify(params),{headers:{
         Authorization:Authorization
     }});
     try {
+        console.log(z.data.res.hd.desc)
         if(z.data.res.bd.data.everyDayWord){
             console.log(z.data.res.bd.data.everyDayWord);
         }else{
-
+            
         }
         
     } catch (error) {    
@@ -87,7 +88,6 @@ async function doTask(token,Config){
             await Promise.race([doTask(uinfo.authcode,Cfg),wait])
             await tool.wait(0.5);
         }
-        console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<  all task finish <<<<<<<<<<<<<<<<<<');
     }else{
 
         console.log('\033[1;37;41m %s\033[0m','No Token, Skip ');
