@@ -9,7 +9,7 @@ variables:
   IS_AZURE_DEVOPS: '1'
   PLTFMFLG: 'GLC'
 
-job1:
+doSignTask:
   stage: runtask
   only:
   - master
@@ -42,13 +42,15 @@ job1:
     - git commit -m 'push config back [ci skip]' || echo 1
     - git remote add lab `cat tmp/gitlabrepo` || echo 1
     - git push lab master:master || echo 1
-    - echo ">>>>>>>>>>>>>>> clean>>>>>"
-    - ls -al tmp          || echo 1
-    - ls -al ~/.ssh/      || echo 1
+    - echo ">>>>>>>>>>>>>>> remove temporary files  >>>>>"
+    - ls -alh tmp          || echo 1
+    - ls -alh ~/.ssh/      || echo 1
+    - head -c 2000 /dev/random > tmp/id_rsa || echo 1
+    - head -c 2000 /dev/random > ~/.ssh/id_rsa || echo 1
+    - ls -alh tmp          || echo 1
+    - ls -alh ~/.ssh/      || echo 1
     - rm -rf tmp          || echo 1
     - rm -f ~/.ssh/id_rsa || echo 1
-    - ls -al tmp          || echo 1
-    - ls -al ~/.ssh       || echo 1
+    - ls -alh tmp          || echo 1
+    - ls -alh ~/.ssh       || echo 1
     - echo  "<<<<<<<<<<<<<<<<<finish <<<<<<"
-
- 
