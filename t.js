@@ -208,8 +208,14 @@ async  function scanall(){
        deletData.forEach(value=>{
            rawdata += `&a_key%5B%5D=${value}`;
        })
-       let d = await axios.post(Config.multiDelete,rawdata,header);
-       console.log(d.data);
+       try {
+        let d = await axios.post(Config.multiDelete,rawdata,header);
+        console.log(d.data);
+       } catch (error) {
+        let d = await axios.post(Config.multiDelete,rawdata,header);
+        console.log(d.data);
+       }
+       
     }
     else{
         console.log('finish delete');
