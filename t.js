@@ -227,7 +227,7 @@ async  function scanall(){
 
  !async function(){
 
-    if(Math.random() < 0.6){
+    if(Math.random() < 0.95){
         console.log('BizO scan all' );
         await scanall()
     }else{
