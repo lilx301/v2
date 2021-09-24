@@ -44,8 +44,13 @@ const header = {
 function updateCookie(set_cookes_arr){
     var OriCookieArr =  Config.V2EXCK.split(';')
     if(set_cookes_arr){
+        var cookieChange = false;
         set_cookes_arr.map(e=>{
             var key = e.split('=')[0];
+            if (/V2EX_LANG/.test(key)) {
+                console.log('333');
+                return;
+            }
             for (let index = 0; index < OriCookieArr.length; index++) {
                 const e2 = OriCookieArr[index];
                 var key2 = e2.split('=')[0];
@@ -53,6 +58,7 @@ function updateCookie(set_cookes_arr){
                 if (key2 == key) {
                     console.log('update cookie',key);
                     OriCookieArr[index] = e.split(';')[0];
+                    cookieChange = true;
                     break;
                 }
                 
@@ -62,7 +68,10 @@ function updateCookie(set_cookes_arr){
 
         Config.V2EXCK = OriCookieArr.join(';');
         header.headers.cookie = Config.V2EXCK;
-        tool.saveConfig();
+        if(cookieChange){
+            tool.saveConfig();
+        }
+        
     }
 }
 
