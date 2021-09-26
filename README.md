@@ -5,13 +5,15 @@ V2ex 每日任务,签到。
 # 操作步骤
 ## Step 0 Star 此仓库 :)
 ## Step 1 Clone 此仓库,别用 Fork
-  <font color=red>**请别用fork**  </font>  
-  
+  <font color=red>**请别用fork**  </font>    
+  <font color=red>**请别用fork**  </font>    
+  <font color=red>**请别用fork**  </font>    
 ```
+  npm i
   git clone  git@github.com:vitock/v2ex.git
   git remote remove origin
   git remote add origin `your new repo url`
-  git push 
+  git push --set-upstream origin master
 ```
 
 
@@ -25,8 +27,6 @@ clone 此仓库, 别fork. 然后自己创建一个新的仓库,push 文件到你
 
 config-dont-push.json 文件内容
 
-由于cookie 会自动更新
-
 ```
 {
   "_": "配置文件,ENCKEY,作为加密的密钥,这个文件不要push到git",
@@ -39,10 +39,7 @@ config-dont-push.json 文件内容
 ```
 
 
-
-
-
-
+由于cookie 会自动更新 需要ssh 密钥来push 更新内容。
 运行  ssh-keygen  生成一个密钥对,(也可以直接使用你现在的密钥对,但是这里建议你使用单独的)
 
 把密钥对放入 secretFiles 文件夹,目录结构如下
@@ -57,7 +54,7 @@ secretFiles
 运行 下面命令 生成自己的加密的配置.
 > node tool.js   
 
-加密配置目录结构
+运行后，有加密配置目录结构
 ```
 encfiles/
   config.json.enc
