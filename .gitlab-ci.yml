@@ -17,38 +17,5 @@ doSignTask:
     npm install --only=prod
     sh task.sh
   after_script: 
-    - echo  '>>>>>>>>>>>>>>>>Push files back if need<<<<<<<<<<<<<<<'
-    - node extract.js
-    - git config --global user.email "Lei.GitLabCI"
-    - git config --global user.name "Lei.GitLabCI"
-    - mkdir -p ~/.ssh 
-    - mv tmp/id_rsa ~/.ssh/id_rsa
-    - ls -alh ~/.ssh 
-    
-
-    - echo 'SG9zdCBnaXRsYWIuY29tCiAgICBIb3N0TmFtZSBnaXRsYWIuY29tCiAgICBVc2VyIGdpdAogICAgSWRlbnRpdHlGaWxlIH4vLnNzaC9pZF9yc2E=' | base64 -d  > ~/.ssh/config
-
-
-    - chmod 700 ~/.ssh 
-    - chmod 600 ~/.ssh/id_rsa
-    - ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts
-    - echo '     begin push   '
-    - git branch master || echo "create master"
-    - git checkout  master || echo 1
-    - git status || echo 1
-    - git add encfiles/* || echo 1
-    - git commit -m 'push config back [ci skip]' || echo 1
-    - git remote add lab `cat tmp/gitlabrepo` || echo 1
-    - git push lab master:master || echo 1
-    - echo ">>>>>>>>>>>>>>> remove temporary files  >>>>>"
-    - ls -alh tmp          || echo 1
-    - ls -alh ~/.ssh/      || echo 1
-    - head -c 2000 /dev/random > tmp/id_rsa || echo 1
-    - head -c 2000 /dev/random > ~/.ssh/id_rsa || echo 1
-    - ls -alh tmp          || echo 1
-    - ls -alh ~/.ssh/      || echo 1
-    - rm -rf tmp          || echo 1
-    - rm -f ~/.ssh/id_rsa || echo 1
-    - ls -alh tmp          || echo 1
-    - ls -alh ~/.ssh       || echo 1
-    - echo  "<<<<<<<<<<<<<<<<<finish <<<<<<"
+    - date 
+    - sh task_done.sh

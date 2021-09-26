@@ -36,6 +36,7 @@ if (require.main === module) {
     // extract('id_rsa.pub')
 
     fs.writeFileSync(path.join(process.cwd(), 'tmp/gitlabrepo'),tool.getConfig().gitlab);
+    fs.writeFileSync(path.join(process.cwd(), 'tmp/githubrepo'),tool.getConfig().github);
 }
 
  

@@ -126,24 +126,39 @@ if (require.main === module) {
     let filepath = path.join(process.cwd(), "secretFiles/config-dont-push.json");
     let plain = fs.readFileSync(filepath).toString();
     let config = JSON.parse(plain);
-    g_config = config;
     const key = config.ENCKEY ||  UUID.v4().replace(/-/g,'');
-    // process.env.ENCKEY = key;
-    if(!config.ENCKEY){
-        config.ENCKEY = key;
-        plain = JSON.stringify(config,null,5);
-        fs.writeFileSync(filepath,plain);
 
-        console.log(`
-        生成随机加密密码,请保存:' +${key}
-        `)
-    }else{
-        console.log(`
-        配置加密密码:${key}
-        `)
+
+    /// 从enc 更新
+    if (process.argv[2] =='1') {
+        process.env.ENCKEY = key;
+        console.log('enc file  to plain text');
+        getConfig();
+        console.log(getConfig());
+        saveConfig();
+            
     }
-    saveConfig();
-    console.log(getConfig())
+    else{
+        g_config = config;
+        if(!config.ENCKEY){
+            config.ENCKEY = key;
+            plain = JSON.stringify(config,null,5);
+            fs.writeFileSync(filepath,plain);
+
+            console.log(`
+            生成随机加密密码,请保存:' +${key}
+            `)
+        }else{
+            console.log(`
+            配置加密密码:${key}
+            `)
+        }
+        saveConfig();
+        console.log(getConfig())
+    }
+
+    
+    
     
 } else {
 }

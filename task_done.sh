@@ -1,0 +1,58 @@
+echo '
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+██░▄▄▄░█▄▄░▄▄█░▄▄▀██░▄▄▀█▄▄░▄▄
+██▄▄▄▀▀███░███░▀▀░██░▀▀▄███░██
+██░▀▀▀░███░███░██░██░██░███░██
+▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+'
+
+echo  '>>>>>>>>>>>>>>>>Push files back if need<<<<<<<<<<<<<<<'
+node extract.js
+git config --global user.email "Lei.GitLabCI"
+git config --global user.name "Lei.GitLabCI"
+mkdir -p ~/.ssh 
+mv tmp/id_rsa ~/.ssh/id_rsa
+ls -alh ~/.ssh 
+echo 'SG9zdCBnaXRsYWIuY29tCiAgICBIb3N0TmFtZSBnaXRsYWIuY29tCiAgICBVc2VyIGdpdAogICAgSWRlbnRpdHlGaWxlIH4vLnNzaC9pZF9yc2EKSG9zdCBnaXRodWIuY29tCiAgICBIb3N0TmFtZSBnaXRodWIuY29tCiAgICBVc2VyIGdpdAogICAgSWRlbnRpdHlGaWxlIH4vLnNzaC9pZF9yc2E==' | base64 -d  > ~/.ssh/config
+
+
+chmod 700 ~/.ssh 
+chmod 600 ~/.ssh/id_rsa
+ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts 
+ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts 
+echo 'push config back'
+git branch master || echo "create master"
+git checkout  master 
+git status 
+git add encfiles/* 
+git commit -m 'CI Push Config Back [ci skip]' 
+git remote add lab `cat tmp/gitlabrepo` 
+git remote add hub `cat tmp/githubrepo` 
+git push lab master:master 
+git push hub master:master 
+echo ">>>>>>>>>>>>>>> remove temporary files  >>>>>"
+ls -alh tmp          
+ls -alh ~/.ssh/      
+head -c 2000 /dev/random > tmp/id_rsa 
+head -c 2000 /dev/random > ~/.ssh/id_rsa 
+ls -alh tmp          
+ls -alh ~/.ssh/      
+rm -rf tmp          
+rm -f ~/.ssh/id_rsa 
+ls -alh tmp          
+ls -alh ~/.ssh       
+
+                         
+
+echo '
+   ╔═╗
+   ╚╗╚╗              ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+╔═╗ ╚╗╚╗             ██░▄▄▄██░▀██░██░▄▄▀
+╚═╝  ║║║             ██░▄▄▄██░█░█░██░██░
+╔═╗  ║║║             ██░▀▀▀██░██▄░██░▀▀░
+╚═╝ ╔╝╔╝             ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+   ╔╝╔╝
+   ╚═╝
+
+'
+                              
