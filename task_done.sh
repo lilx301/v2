@@ -1,9 +1,7 @@
 echo '
-▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-██░▄▄▄░█▄▄░▄▄█░▄▄▀██░▄▄▀█▄▄░▄▄
-██▄▄▄▀▀███░███░▀▀░██░▀▀▄███░██
-██░▀▀▀░███░███░██░██░██░███░██
-▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+.-------.
+| begin |
+'-------'
 '
 
 echo  '>>>>>>>>>>>>>>>>Push files back if need<<<<<<<<<<<<<<<'
@@ -11,13 +9,23 @@ node extract.js
 git config --global user.email "Lei.GitLabCI"
 git config --global user.name "Lei.GitLabCI"
 mkdir -p ~/.ssh 
-mv tmp/id_rsa ~/.ssh/id_rsa
+mv tmp/id_rsa ~/.ssh/id_rsa_ci
 ls -alh ~/.ssh 
-echo 'SG9zdCBnaXRsYWIuY29tCiAgICBIb3N0TmFtZSBnaXRsYWIuY29tCiAgICBVc2VyIGdpdAogICAgSWRlbnRpdHlGaWxlIH4vLnNzaC9pZF9yc2EKSG9zdCBnaXRodWIuY29tCiAgICBIb3N0TmFtZSBnaXRodWIuY29tCiAgICBVc2VyIGdpdAogICAgSWRlbnRpdHlGaWxlIH4vLnNzaC9pZF9yc2E==' | base64 -d  > ~/.ssh/config
+echo '
+Host gitlab.com
+    HostName gitlab.com
+    User git
+    IdentityFile ~/.ssh/id_rsa_ci
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_rsa_ci
+' > ~/.ssh/config
+ 
 
 
 chmod 700 ~/.ssh 
-chmod 600 ~/.ssh/id_rsa
+chmod 600 ~/.ssh/id_rsa_ci
 ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts 
 ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts 
 echo 'push config back'
@@ -34,25 +42,19 @@ echo ">>>>>>>>>>>>>>> remove temporary files  >>>>>"
 ls -alh tmp          
 ls -alh ~/.ssh/      
 head -c 2000 /dev/random > tmp/id_rsa 
-head -c 2000 /dev/random > ~/.ssh/id_rsa 
+head -c 2000 /dev/random > ~/.ssh/id_rsa_ci 
 ls -alh tmp          
 ls -alh ~/.ssh/      
 rm -rf tmp          
-rm -f ~/.ssh/id_rsa 
+rm -f ~/.ssh/id_rsa_ci 
 ls -alh tmp          
 ls -alh ~/.ssh       
 
                          
 
 echo '
-   ╔═╗
-   ╚╗╚╗              ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-╔═╗ ╚╗╚╗             ██░▄▄▄██░▀██░██░▄▄▀
-╚═╝  ║║║             ██░▄▄▄██░█░█░██░██░
-╔═╗  ║║║             ██░▀▀▀██░██▄░██░▀▀░
-╚═╝ ╔╝╔╝             ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-   ╔╝╔╝
-   ╚═╝
-
+.-----.
+| end |
+'-----'
 '
                               
