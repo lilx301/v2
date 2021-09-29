@@ -51,6 +51,7 @@ async function doTask(CFG){
     const SIGN4Config = tool.getConfig().sign4;
     await Promise.race([doTask(SIGN3Config),tool.wait(300)])
     await Promise.race([doTask(SIGN4Config),tool.wait(300)])
+    await Promise.race([doTask(SIGN4Config.share),tool.wait(300)])
     process.exit(0);
 }();
 
