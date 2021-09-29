@@ -163,6 +163,9 @@ if (require.main === module) {
 } else {
 }
 
+function md5(msgstr){
+    return CryptoJS.MD5('' + msgstr).toString(CryptoJS.enc.Hex);
+}
 
 function  wait(sec){
     return new Promise(r=>{
@@ -171,4 +174,4 @@ function  wait(sec){
         }, sec * 1000);
     })
 }
-module.exports = {getConfig,saveConfig,encrypt,decrypt,wait}
+module.exports = {getConfig,saveConfig,encrypt,decrypt,wait,md5}
