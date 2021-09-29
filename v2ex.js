@@ -179,7 +179,7 @@ async function qmsg(msg) {
       resolve(1);
     });
 
-    arrTask.push(Promise.race([t2, tool.wait(1)]));
+    arrTask.push(tool.race([t2, tool.wait(2)]));
   } else {
     console.log("没有 tgbot");
   }

@@ -85,7 +85,7 @@ async function doTask(token,Config){
         for (let i = 0; i < arr.length; i++) {
             const Cfg = arr[i];
             var wait = tool.wait(40);
-            await Promise.race([doTask(uinfo.authcode,Cfg),wait])
+            await tool.race([doTask(uinfo.authcode,Cfg),wait])
             await tool.wait(0.5);
         }
     }else{

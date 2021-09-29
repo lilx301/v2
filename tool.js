@@ -7,7 +7,6 @@ const ivSalt = 'lPc1lE3M'
 const zlib = require('zlib')
 const { lib } = require("crypto-js")
 
-
 function decrypt(messageB64,key){
     var message = messageB64; 
     key = CryptoJS.HmacSHA256(key ,keysalt);
@@ -174,4 +173,10 @@ function  wait(sec){
         }, sec * 1000);
     })
 }
-module.exports = {getConfig,saveConfig,encrypt,decrypt,wait,md5}
+async function race(arr){
+    try {
+        return await Promise.race(arr);
+    } catch (error) {
+    }
+}
+module.exports = {getConfig,saveConfig,encrypt,decrypt,wait,md5,race}
