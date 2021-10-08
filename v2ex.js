@@ -216,6 +216,24 @@ async function sign() {
   }
 }
 
+console.log(`
+
+
+
+
+**************************************************
+*
+*
+*   ${new Date(Date.now() + 8 * 3600000).toISOString().replace(/T|Z/g," ")}
+*
+*
+**************************************************
+
+
+
+
+`)
+
 !(async function () {
   var timecount = tool.wait(60 * 6);
   await Promise.race([sign(), timecount]);
