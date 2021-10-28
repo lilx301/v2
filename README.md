@@ -4,7 +4,6 @@
  > 此处代码是 ci 自动备份push 过来的。
 
 # 操作步骤
-## Step 0 Star 此仓库 :)
 ## Step 1 Clone 此仓库,别用 Fork
 ```
   npm i
