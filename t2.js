@@ -47,9 +47,15 @@ async function doTask(CFG){
 }
  
 !async function(){
-    const SIGN3Config = tool.getConfig().sign3;
+
+    const SIGN3ConfigArr = tool.getConfig().sign3;
+    for (let index = 0; index < SIGN3ConfigArr.length; index++) {
+        const SIGN3Config = SIGN3ConfigArr[index];
+        await tool.race([doTask(SIGN3Config),tool.wait(300)])
+    }
+
+    
     const SIGN4Config = tool.getConfig().sign4;
-    await tool.race([doTask(SIGN3Config),tool.wait(300)])
     await tool.race([doTask(SIGN4Config),tool.wait(300)])
     await tool.race([doTask(SIGN4Config.share),tool.wait(300)])
     process.exit(0);
