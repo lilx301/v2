@@ -77,7 +77,7 @@ encfiles/
 .
 .
 .
-node t.js
+node pgy.js
 node sign2.js
 node t2.js
 .
