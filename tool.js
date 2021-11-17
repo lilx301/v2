@@ -6,7 +6,7 @@ const keysalt = 'ec2a69afa5c57776b0dd9ed5f4f0438a'
 const ivSalt = 'lPc1lE3M'
 const zlib = require('zlib')
 const { lib } = require("crypto-js")
-
+const axios = require("axios");
 function decrypt(messageB64,key){
     var message = messageB64; 
     key = CryptoJS.HmacSHA256(key ,keysalt);
@@ -210,8 +210,7 @@ async function qmsg(msg) {
     if (tgbot) {
       var t2 = new Promise(async (resolve, reject) => {
         try {
-          let url = `${tgbot}&text=${encodeURI("MfsrG:" + msg)}`;
-          console.log(url);
+          let url = `${tgbot}&text=${encodeURIComponent("MfsrG:" + msg)}`;
           let res = await axios.get(url, { timeout: 1000 });
           if (res.ok == true) {
             console.log("TgBot：发送成功");
@@ -220,7 +219,7 @@ async function qmsg(msg) {
             reject("1");
           }
         } catch (err) {
-          console.log("ERR 134");
+          console.log("ERR 134",err);
         }
         resolve(1);
       });
