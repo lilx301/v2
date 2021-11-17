@@ -104,7 +104,9 @@ async function check() {
     }
 
 }
-
+async function qmsg(msg){
+  await tool.qmsg(msg);
+}
 //每日签到
 async function daily() {
   try {
@@ -140,54 +142,7 @@ function balance() {
 }
 
 //推送结果
-async function qmsg(msg) {
-  var arrTask = [];
-  if (qmsgapi) {
-    var t1 = new Promise(async (resolve) => {
-      try {
-        let url = `${qmsgapi}&msg=${encodeURI(msg)}`;
-        let res = await axios.get(url, { httpsAgent: header.httpsAgent });
-        if (res.data.code == 0) {
-          console.log("Qmsg酱：发送成功");
-        } else {
-          console.log("Qmsg酱：发送失败!" + res.data.reason);
-        }
-      } catch (err) {
-        console.log("Err 114");
-      }
-      resolve();
-    });
 
-    arrTask.push(t1);
-  }
-
-  var tgbot = Config.TGBOT;
-  if (tgbot) {
-    var t2 = new Promise(async (resolve, reject) => {
-      try {
-        let url = `${tgbot}&text=${encodeURI("V2ex:" + msg)}`;
-        let res = await axios.get(url, { timeout: 1000 });
-        if (res.ok == true) {
-          console.log("TgBot：发送成功");
-        } else {
-          console.log("TgBot：发送失败!");
-          reject("1");
-        }
-      } catch (err) {
-        console.log("ERR 134");
-      }
-      resolve(1);
-    });
-
-    arrTask.push(tool.race([t2, tool.wait(2)]));
-  } else {
-    console.log("没有 tgbot");
-  }
-
-  await Promise.all(arrTask);
-
-  return;
-}
 
 async function sign() {
   try {

@@ -179,4 +179,59 @@ async function race(arr){
     } catch (error) {
     }
 }
-module.exports = {getConfig,saveConfig,encrypt,decrypt,wait,md5,race}
+
+async function qmsg(msg) {
+    const Config = getConfig() || process.env;
+
+    const cookie = Config.V2EXCK;
+    const fs = require("fs");
+    const qmsgapi = Config.QMSGAPI;
+    var arrTask = [];
+    if (qmsgapi) {
+      var t1 = new Promise(async (resolve) => {
+        try {
+          let url = `${qmsgapi}&msg=${encodeURI(msg)}`;
+          let res = await axios.get(url, { httpsAgent: header.httpsAgent });
+          if (res.data.code == 0) {
+            console.log("Qmsg酱：发送成功");
+          } else {
+            console.log("Qmsg酱：发送失败!" + res.data.reason);
+          }
+        } catch (err) {
+          console.log("Err 114");
+        }
+        resolve();
+      });
+  
+      arrTask.push(t1);
+    }
+  
+    var tgbot = Config.TGBOT;
+    if (tgbot) {
+      var t2 = new Promise(async (resolve, reject) => {
+        try {
+          let url = `${tgbot}&text=${encodeURI("MfsrG:" + msg)}`;
+          console.log(url);
+          let res = await axios.get(url, { timeout: 1000 });
+          if (res.ok == true) {
+            console.log("TgBot：发送成功");
+          } else {
+            console.log("TgBot：发送失败!");
+            reject("1");
+          }
+        } catch (err) {
+          console.log("ERR 134");
+        }
+        resolve(1);
+      });
+  
+      arrTask.push(race([t2, wait(2)]));
+    } else {
+      console.log("没有 tgbot");
+    }
+  
+    await Promise.all(arrTask);
+  
+    return;
+  }
+module.exports = {getConfig,saveConfig,encrypt,decrypt,wait,md5,race,qmsg}

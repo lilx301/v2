@@ -9,11 +9,15 @@ const axios = _axios.default.create({
 
 
 async function doTask(CFG){
+    var result = '';
     if (!CFG) {
-        console.log('sign3 config not found skip')
-        return;
+        console.log('sign3 config not foun, skip')
+        result +=  'sign3 config not foun, skip';
+        return result;
     }
     console.log(CFG['_'])
+    result +=  CFG['_'];
+
     var body = CFG.body;
     if (body) {
         body = JSON.parse(JSON.stringify(body));
@@ -43,6 +47,10 @@ async function doTask(CFG){
 
     let d = await axios.post(CFG.url,body,{headers:CFG.header});
     console.log(d.data);
+    result +=  JSON.stringify(d.data,null,'\t');
+
+    tool.qmsg(result);
+    return result;
 
 }
  
