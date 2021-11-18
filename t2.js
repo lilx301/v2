@@ -48,8 +48,10 @@ async function doTask(CFG){
     let d = await axios.post(CFG.url,body,{headers:CFG.header});
     console.log(d.data);
     result +=  JSON.stringify(d.data,null,'\t');
-
-    tool.qmsg(result);
+    // 是否通知
+    if (CFG.notify) {
+        tool.qmsg(result);    
+    }
     return result;
 
 }
