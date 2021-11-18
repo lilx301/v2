@@ -49,9 +49,7 @@ async function login(){
         return;
     }
 
-    console.log('login');
     let z = await axios.post(Config.login, Config.logindata,{timeout:6000});
-    console.log(z.data);
 
     var cookies = z.headers['set-cookie'];
     var mapidx = {};
@@ -90,6 +88,7 @@ async  function scanmainpage(){
         }
 
         var list = m.data.list;
+
 
         // var list = m.data.list
         console.log('len', list.length);
@@ -233,7 +232,7 @@ async  function scanall(){
 
  !async function(){
 
-    if(Math.random() < 0.95){
+    if(Math.random() < 0.55){
         console.log('BizO scan all' );
         await scanall()
     }else{
