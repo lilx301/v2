@@ -233,4 +233,9 @@ async function qmsg(msg) {
   
     return;
   }
-module.exports = {getConfig,saveConfig,encrypt,decrypt,wait,md5,race,qmsg}
+
+function beijingTime(){
+    var beijin = new Date(Date.now() + 480 * 60 * 1000);
+    return beijin.toISOString().replace("T"," ").replace("Z","");
+}
+module.exports = {getConfig,saveConfig,encrypt,decrypt,wait,md5,race,qmsg,beijingTime}

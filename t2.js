@@ -16,6 +16,14 @@ async function doTask(CFG){
         return result;
     }
     console.log(CFG['_'])
+    if (endDate) {
+        let dateNow = tool.beijingTime().substr(0,10);
+        if(dateNow > endDate){
+            console.log(`skip endDate:${endDate}  | now: ${dateNow}`)
+        }
+    }
+
+
     result +=  CFG['_'];
 
     var body = CFG.body;
@@ -62,6 +70,7 @@ async function doTask(CFG){
     for (let index = 0; index < SIGN3ConfigArr.length; index++) {
         const SIGN3Config = SIGN3ConfigArr[index];
         await tool.race([doTask(SIGN3Config),tool.wait(300)])
+        await tool.wait(3);
     }
 
     
