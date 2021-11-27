@@ -16,6 +16,7 @@ async function doTask(CFG){
         return result;
     }
     console.log(CFG['_'])
+    var endDate = CFG.endDate;
     if (endDate) {
         let dateNow = tool.beijingTime().substr(0,10);
         if(dateNow > endDate){
