@@ -21,6 +21,7 @@ async function doTask(CFG){
         let dateNow = tool.beijingTime().substr(0,10);
         if(dateNow > endDate){
             console.log(`skip endDate:${endDate}  | now: ${dateNow}`)
+            return;
         }
     }
 
