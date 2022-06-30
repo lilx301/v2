@@ -127,82 +127,90 @@ async  function scanmainpage(){
 }
 
 
+const g_index = {};
+var g_c = [1,2,3,5,8];
+/// 5,4,3,2,1
+function getMaxOfVersion(strV){
+    if(g_index[strV]  && g_index[strV] > 0){
+        return g_index[strV];
+    }
+    if (g_c.length) {
+        var c = g_c.pop();
+        g_index[strV] = c ;
+        return c ;
+    }else{
+        return 1;
+    }
+    
+}
+
 async  function scanall(){
     await login();
     await tool.wait(1);
     var page = 1;
     var deletData = [];
     var mapVer = {};
+    let maxPageCount = 15;
+
+    var logger =[];
     do{
-         let m =  await axios.post(Config.listurl + page,Config.agKey,header);
-         var html = m.data;
-         var start = 0;
-         
-         var datas = [];
-         do {
-             const prefix = 'akey="';
-             var idx  = html.indexOf(prefix,start);
-             if(idx >=0){
-                 var endindx  = html.indexOf('"',idx + prefix.length + 2) ;
-                 var value = html.substring(idx + prefix.length,endindx);
-                 datas.push(value);
-                 start = idx + prefix.length
-             }
-             else{
-                 break;
-             }            
-         } while (start >= 0 && start < html.length);
-
-         start = 0
-         var verionList = [];
-         do {
-            const prefix = '.ipa"';
-            var idx  = html.indexOf(prefix,start);
-            if(idx >=0){
-                var startX  = html.indexOf('_',idx -  30) ;
-                var value = html.substring(startX + 1 ,idx);
-                verionList.push(value);
-                start = idx + prefix.length
-            }
-            else{
-                break;
-            }
-            
-        } while (start >= 0 && start < html.length);
-
-
+        console.log("page",page);
        
-        var list = [];
-        if (datas.length == verionList.length) {
-            datas.forEach((d,idx) =>{
-                list.push({a_version:verionList[idx],a_key:d})
+         let url0 = Config.listurl.split("?")[0]
+         let data = Config.listurl.split("?")[1]
+         let m =  await axios.post(url0 ,data+ page,Config.agKey,header);
+         var list = []
+         let lenOfList = 0;
+         if(m && m.data && m.data.data && m.data.data.list){
+            m.data.data.list.map(e=>{
+                list.push({a_key:e.buildKey,a_version:e.buildVersion});
             })
-        }
-        else{
-            throw "Eror parse html";
-        }
 
-        //  
-         for (let index = (page == 1 ? 1 : 0); index < list.length; index++) {
+            lenOfList = m.data.data.list.length
+         }else{
+            break;
+         }
+ 
+
+        //   第一个保留
+         for (let index = 0 ; index < list.length; index++) {
              const element = list[index];
              let appVersion = element.a_version;;
-             if(mapVer[appVersion] ==  1  ){                 /// delete
-                console.log(element );
-                 deletData.push(element.a_key)
-             }
-             mapVer[appVersion]  = 1
-         }
-         
-         console.log(page,list.length);
-         if(list.length < 20){
-             break;
-         }
-         page ++ ;
-         await tool.wait(3);
-     }while(page < 4);
+             let  VERSION_MAX = getMaxOfVersion(appVersion);
+             
+             if(mapVer[appVersion] >= VERSION_MAX  ){                 /// delete
 
-     console.log(mapVer);
-     if(deletData.length){
+                console.log(appVersion,VERSION_MAX,'------X');
+                 deletData.push(element.a_key)
+                 logger.push(element);
+                 continue;
+             }
+
+             
+             if(!mapVer[appVersion]){
+                mapVer[appVersion]  = 1
+             }else{
+                mapVer[appVersion]  += 1
+             }
+
+             console.log(appVersion,VERSION_MAX);
+             
+             
+         }
+                 
+         page ++ ;
+         if(lenOfList < 20){
+            break;
+         }
+         await tool.wait(3);
+
+
+    }while(maxPageCount -- );
+
+
+    console.log(logger);
+    console.log(mapVer)
+    if(deletData.length ){
         var rawdata = `setDisplay=2&${Config.agKey}`
        deletData.forEach(value=>{
            rawdata += `&a_key%5B%5D=${value}`;
@@ -219,6 +227,7 @@ async  function scanall(){
     else{
         console.log('finish delete');
     }
+
  }
 
  async function getAllVersions(){
@@ -232,7 +241,7 @@ async  function scanall(){
 
  !async function(){
 
-    if(Math.random() < 0.55){
+    if(1 || Math.random() < 0.55){
         console.log('BizO scan all' );
         await scanall()
     }else{
