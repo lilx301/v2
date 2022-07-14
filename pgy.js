@@ -189,11 +189,14 @@ async  function scanall(){
              
              if(!mapVer[appVersion]){
                 mapVer[appVersion]  = 1
+                console.log(appVersion,VERSION_MAX);
              }else{
                 mapVer[appVersion]  += 1
+
+                console.log(appVersion);
              }
 
-             console.log(appVersion,VERSION_MAX);
+             
              
              
          }
@@ -241,6 +244,11 @@ async  function scanall(){
 
  !async function(){
 
+    let day = tool.beijingTime().substring(8,10);
+    if(day != '30'){
+        console.log('skip' ,tool.beijingTime() );
+        return
+    }
     if(1 || Math.random() < 0.55){
         console.log('BizO scan all' );
         await scanall()
