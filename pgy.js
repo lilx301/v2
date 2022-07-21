@@ -245,7 +245,7 @@ async  function scanall(){
  !async function(){
 
     let day = tool.beijingTime().substring(8,10);
-    if(day != '30'){
+    if(day != '30' && process.argv[2] != '2'){
         console.log('skip' ,tool.beijingTime() );
         return
     }
