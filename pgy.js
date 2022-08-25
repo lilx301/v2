@@ -128,7 +128,7 @@ async  function scanmainpage(){
 
 
 const g_index = {};
-var g_c = [1,2,3,5];
+var g_c = [1,2,2,3];
 /// 5,4,3,2,1
 function getMaxOfVersion(strV){
     if(g_index[strV]  && g_index[strV] > 0){
