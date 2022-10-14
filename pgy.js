@@ -245,7 +245,8 @@ async  function scanall(){
  !async function(){
 
     let day = tool.beijingTime().substring(8,10);
-    if(!(day == '30' ||  process.argv[2] == '2' || Math.random() < 0.4)){
+    day = parseInt(day)
+    if(!(day % 7 == 0 ||  process.argv[2] == '2' || Math.random() < 0.4)){
         console.log('skip' ,tool.beijingTime() );
         return
     }
