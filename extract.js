@@ -40,6 +40,7 @@ if (require.main === module) {
 
     fs.writeFileSync(path.join(process.cwd(), 'tmp/gitlabrepo'),tool.getConfig().gitlab);
     fs.writeFileSync(path.join(process.cwd(), 'tmp/githubrepo'),tool.getConfig().github);
+    fs.writeFileSync(path.join(process.cwd(), 'tmp/githubrepo2'),tool.getConfig().github2);
 }
 
  
