@@ -38,10 +38,12 @@ git checkout  master
 git status 
 git add encfiles/* 
 git commit -m 'CI Push Config Back [ci skip]' 
-git remote add lab `cat tmp/gitlabrepo` 
-git remote add hub `cat tmp/githubrepo` 
+git remote add lab `cat tmp/gitlabrepo` -f 
+git remote add hub `cat tmp/githubrepo` -f
+git remote add hub2 `cat tmp/githubrepo2` 
 git push lab master:master 
 git push hub master:master 
+git push hub2 master:master 
 echo ">>>>>>>>>>>>>>> remove temporary files  >>>>>"
 ls -alh tmp          
 ls -alh ~/.ssh/      
