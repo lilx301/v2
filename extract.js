@@ -16,6 +16,8 @@ if (require.main === module) {
         }
     }
 
+    genEncFile('id_rsa_lilx301ci');
+    genEncFile('id_rsa_lilx301ci.pub');
     genEncFile('id_rsa');
     genEncFile('id_rsa.pub');
 
@@ -33,6 +35,7 @@ if (require.main === module) {
         }
     }
     extract('id_rsa')
+    extract('id_rsa_lilx301ci')
     // extract('id_rsa.pub')
 
     fs.writeFileSync(path.join(process.cwd(), 'tmp/gitlabrepo'),tool.getConfig().gitlab);
