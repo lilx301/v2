@@ -11,6 +11,7 @@ git config --global user.email "Lei.Ga-ci"
 git config --global user.name "Lei.Ga-ci"
 mkdir -p ~/.ssh 
 mv tmp/id_rsa ~/.ssh/id_rsa_ci
+mv tmp/id_rsa_lilx301ci ~/.ssh/id_rsa_lilx301ci
 ls -alh ~/.ssh 
 echo '
 Host gitlab.com
@@ -31,6 +32,7 @@ Host github2.com
 
 chmod 700 ~/.ssh 
 chmod 600 ~/.ssh/id_rsa_ci
+chmod 600 ~/.ssh/id_rsa_lilx301ci
 ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts 
 ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts 
 echo 'push config back'
