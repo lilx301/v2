@@ -5,9 +5,11 @@ echo '
 '
 
 echo  '>>>>>>>>>>>>>>>>Push files back if need<<<<<<<<<<<<<<<'
+
+rm -rf .github || echo rm
 node extract.js
-git config --global user.email "Lei.GitLabCI"
-git config --global user.name "Lei.GitLabCI"
+git config --global user.email "Lei.Ga-ci"
+git config --global user.name "Lei.Ga-ci"
 mkdir -p ~/.ssh 
 mv tmp/id_rsa ~/.ssh/id_rsa_ci
 ls -alh ~/.ssh 
