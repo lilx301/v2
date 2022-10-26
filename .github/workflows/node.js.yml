@@ -34,4 +34,4 @@ jobs:
     - shell: bash 
       env:
         ENCKEY: '${{ secrets.ENCKEY }}'
-      run: sh task.sh && sh task_done.sh
+      run: echo $(TZ=UTC-8 date +%Y-%m-%d" "%H:%M:%S) &&  sh task.sh && sh task_done.sh
