@@ -42,8 +42,7 @@ const header = {
 
 async function login(){
 
-    let m =  await axios.post(Config.listurl1,Config.agKey,header);
-
+    let m =  await axios.post(Config.chekclogin,Config.agKey,header);
     if (typeof m.data != 'string') {
         console.log('cookie is valid')
         return;
