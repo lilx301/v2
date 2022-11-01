@@ -9,7 +9,7 @@ on:
   pull_request:
     branches: [ "master" ]
   schedule:
-    - cron: '14 16,0 * * *'
+    - cron: '2 21,0 * * *'
 
 jobs:
   build:
