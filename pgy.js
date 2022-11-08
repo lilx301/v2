@@ -177,7 +177,7 @@ async  function scanall(){
              let appVersion = element.a_version;;
              let  VERSION_MAX = getMaxOfVersion(appVersion);
              
-             if(mapVer[appVersion] >= VERSION_MAX  ){                 /// delete
+             if(mapVer[appVersion] >= VERSION_MAX  || VERSION_MAX == 0 ){                 /// delete
 
                 console.log(appVersion,VERSION_MAX,'------X');
                  deletData.push(element.a_key)
