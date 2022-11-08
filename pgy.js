@@ -43,10 +43,10 @@ const header = {
 async function login(){
 
     let m =  await axios.post(Config.chekclogin,Config.agKey,header);
-    if (typeof m.data != 'string') {
-        console.log('cookie is valid')
-        return;
-    }
+    // if (typeof m.data != 'string') {
+    //     console.log('cookie is valid')
+    //     return;
+    // }
 
     let z = await axios.post(Config.login, Config.logindata,{timeout:6000});
 
@@ -127,7 +127,7 @@ async  function scanmainpage(){
 
 
 const g_index = {};
-var g_c = [1,2,3];
+var g_c = [1];
 /// 5,4,3,2,1
 function getMaxOfVersion(strV){
     if(g_index[strV]  && g_index[strV] > 0){
