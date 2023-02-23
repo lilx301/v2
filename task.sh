@@ -6,3 +6,5 @@ echo "\n\n-----------------sign2.js----------------";
 node sign2.js
 echo "\n\n-----------------t2.js----------------";
 node t2.js
+echo "\n\n-----------------producst js----------------";
+node kxproducts.js
