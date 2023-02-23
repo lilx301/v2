@@ -182,6 +182,15 @@ async function race(arr){
 
 async function qmsg(msg) {
     const Config = getConfig() || process.env;
+    if(Config.bark){
+        var barkurl = `${Config.bark}${encodeURIComponent(msg)}`
+        console.log(barkurl)
+        try {
+            await axios.get(barkurl, { httpsAgent: header.httpsAgent });
+        } catch (error) {
+            
+        }
+    }
 
     const cookie = Config.V2EXCK;
     const fs = require("fs");
