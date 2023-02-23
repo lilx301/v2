@@ -36,8 +36,6 @@ function getListFromHtml(html) {
 
 async function getHtml() {
   const Config = tool.getConfig() || process.env;
-  console.log(Config.shoplist);
-
   var result = await axios.get(Config.shoplist);
  
   return result.data
@@ -60,12 +58,12 @@ async function getHtml() {
   })
   
   if(result.length){
-    var str = '新货物：\n'
+    var str = '新货品：\n'
     result.forEach(e=>{
       str += `${e.goods_name}:\t  ${e.kxb}\n`
     })
 
-    tool.qmsg(str)
+    await tool.qmsg(str)
 
   }
   

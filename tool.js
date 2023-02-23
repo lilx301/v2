@@ -182,6 +182,8 @@ async function race(arr){
 
 async function qmsg(msg) {
     const Config = getConfig() || process.env;
+
+    msg += `\n\n${beijingTime()}`
     if(Config.bark){
         var barkurl = `${Config.bark}${encodeURIComponent(msg)}`
         try {
