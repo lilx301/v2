@@ -184,9 +184,9 @@ async function qmsg(msg) {
     const Config = getConfig() || process.env;
     if(Config.bark){
         var barkurl = `${Config.bark}${encodeURIComponent(msg)}`
-        console.log(barkurl)
         try {
-            await axios.get(barkurl, { httpsAgent: header.httpsAgent });
+            let res = await axios.get(barkurl);
+            console.log(res.data)
         } catch (error) {
             
         }
