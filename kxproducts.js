@@ -15,7 +15,7 @@ function getListFromHtml(html) {
     })()`;
 
     var z = eval(js);
-    console.log(z)
+    // console.log(z)
  
     var result = [];
     for (let i = 0; i < z.length; i++) {
@@ -58,7 +58,7 @@ async function getHtml() {
   })
   
   if(result.length){
-    console.log(result)
+    // console.log(result)
     var str = '新货品：\n'
     result.forEach(e=>{
       str += `${e.goods_name}:\t  ${e.kxb}\n`
