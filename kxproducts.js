@@ -54,7 +54,7 @@ async function getHtml() {
     });
   }
   var result = arr.filter(e=>{
-    return e.stock > '0' && map[e.goods_name] != '1'
+    return e.stock > '0' && map[e.goods_name] != '1'&& !/T恤|卫衣/.test(e.goods_name)
   })
   
   if(result.length){
