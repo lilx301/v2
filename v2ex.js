@@ -100,7 +100,7 @@ async function check() {
         }
       }
     } catch (err) {
-      console.log("Err 56");
+      console.log("Err 56",err);
     }
 
 }
