@@ -127,7 +127,7 @@ if (require.main === module) {
     let config = JSON.parse(plain);
     const key = config.ENCKEY ||  UUID.v4().replace(/-/g,'');
 
-
+    
     /// 从enc 更新
     if (process.argv[2] =='1') {
         process.env.ENCKEY = key;
