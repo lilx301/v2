@@ -17,7 +17,15 @@ if (process.argv[2] == "1") {
 
 const Config = tool.getConfig() || process.env;
 
-const cookie = Config.V2EXCK;
+function base64(s){
+  return Buffer.from(s,'utf-8').toString('base64')
+}
+
+function getCookie(){
+  const cookieB64 = Config.V2EXCK;
+  return Buffer.from(cookieB64,'base64').toString('utf-8')
+}
+const cookie = getCookie()
 const fs = require("fs");
 
 once = null;
@@ -42,7 +50,7 @@ const header = {
 };
 
 function updateCookie(set_cookes_arr){
-    var OriCookieArr =  Config.V2EXCK.split(';')
+    var OriCookieArr =  getCookie().split(';')
     if(set_cookes_arr){
         var cookieChange = false;
         set_cookes_arr.map(e=>{
@@ -66,8 +74,8 @@ function updateCookie(set_cookes_arr){
          
         })
 
-        Config.V2EXCK = OriCookieArr.join(';');
-        header.headers.cookie = Config.V2EXCK;
+        Config.V2EXCK =  base64(OriCookieArr.join(';'));
+        header.headers.cookie = getCookie();
         if(cookieChange){
             tool.saveConfig();
         }
