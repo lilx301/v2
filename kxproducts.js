@@ -54,7 +54,7 @@ async function getHtml() {
     });
   }
   var result = arr.filter(e=>{
-    return e.stock > '0' && map[e.goods_name] != '1'&& !/T恤|卫衣/.test(e.goods_name)
+    return e.stock > '0' && map[e.goods_name] != '1'&& !/T恤|卫衣|指南|月卡|CTF|白帽子|安全演义|货拉拉|鼠标垫/.test(e.goods_name)
   })
   
   if(result.length){
