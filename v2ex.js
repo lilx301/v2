@@ -173,9 +173,12 @@ async function sign() {
     } else {
     }
     console.log(notice);
-    await qmsg(notice);
+    if((new Date).getDate() == 21){
+      await qmsg(notice);
+    }
+    
   } catch (err) {
-    console.log("Err183", err);
+    console.log("Err183");
   }
 }
 
