@@ -60,7 +60,9 @@ async function doTask(CFG){
     result +=  JSON.stringify(d.data,null,'\t');
     // 是否通知
     if (CFG.notify) {
-        tool.qmsg(result);    
+        if((new Date()).getDate() == 23){
+            await tool.qmsg(str)
+        } 
     }
     return result;
 

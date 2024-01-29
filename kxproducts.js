@@ -64,7 +64,11 @@ async function getHtml() {
       str += `${e.goods_name}:\t  ${e.kxb}\n`
     })
 
-    await tool.qmsg(str)
+    if((new Date()).getDate() == 25){
+      await tool.qmsg(str)
+    }
+    
+
 
   }
   
