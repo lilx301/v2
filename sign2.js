@@ -4,7 +4,11 @@ const CryptoJS = require("crypto-js")
 
 
 const axios = _axios.default.create({
-    timeout:35000 
+    timeout:35000 ,
+    validateStatus: function (status) {
+        // 让 axios 认为所有状态码都是合法的，不会抛出异常
+        return true;
+      }
     // proxy:{host:"127.0.0.1",port:8088}
 })
 const SIGN2Config = tool.getConfig().sign2;
@@ -17,7 +21,7 @@ async function doTask(Config){
             ...Config.header
         }});
       
-        console.log('succ')
+        console.log('succ',z.data)
         
     } catch (error) {    
         console.log('err')
