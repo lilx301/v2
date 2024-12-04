@@ -174,7 +174,7 @@ async function sign() {
     }
     console.log(notice);
     if((new Date).getDate() == 21){
-      await qmsg(notice);
+      // await qmsg(notice);
     }
     
   } catch (err) {
