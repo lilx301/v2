@@ -181,6 +181,7 @@ async function race(arr){
 }
 
 async function qmsg(msg) {
+    return
     const Config = getConfig() || process.env;
 
     msg += `\n\n${beijingTime()}`
