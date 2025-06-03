@@ -36,7 +36,7 @@ jobs:
       uses: Lorem3/push2other@v2.1
       with:
           target-url: ${{ secrets.SYNC_URLA }}
-          private-key: ${{ secrets.SYNC_KEY }}
+          private-key: ${{ secrets.SYNC_KEY }} 
     
     - shell: bash 
       env:
