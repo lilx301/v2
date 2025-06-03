@@ -33,15 +33,11 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - name: SyncA
-      uses: Lorem3/push2other@v2.0
+      uses: Lorem3/push2other@v2.1
       with:
           target-url: ${{ secrets.SYNC_URLA }}
           private-key: ${{ secrets.SYNC_KEY }}
-    - name: SyncB
-      uses: Lorem3/push2other@v2.0
-      with:
-          target-url: ${{ secrets.SYNC_URLB }}
-          private-key: ${{ secrets.SYNC_KEY }}
+    
     - shell: bash 
       env:
         ENCKEY: '${{ secrets.ENCKEY }}'
