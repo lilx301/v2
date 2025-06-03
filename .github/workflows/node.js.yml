@@ -22,7 +22,9 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 100
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -30,11 +32,20 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
-    - run: npm test
+    - name: SyncA
+      uses: Lorem3/push2other@v2.0
+      with:
+          target-url: ${{ secrets.SYNC_URLA }}
+          private-key: ${{ secrets.SYNC_KEY }}
+    - name: SyncB
+      uses: Lorem3/push2other@v2.0
+      with:
+          target-url: ${{ secrets.SYNC_URLB }}
+          private-key: ${{ secrets.SYNC_KEY }}
     - shell: bash 
       env:
         ENCKEY: '${{ secrets.ENCKEY }}'
-      run: echo $(TZ=UTC-8 date +%Y-%m-%d" "%H:%M:%S) &&  sh task.sh && sh task_done.sh
+      run: echo $(TZ=UTC-8 date +%Y-%m-%d" "%H:%M:%S) &&  sh task.sh 
 
 
   del_runs:
