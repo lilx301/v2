@@ -45,7 +45,9 @@ const header = {
     // Host: "www.v2ex.com",
     "user-agent":
       "Mozilla/5.0 (Linux; Android 10; Redmi K30) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.83 Mobile Safari/537.36",
-    cookie: `${cookie}`,
+    Cookie: `${cookie}`,
+
+    Accept:'text/html,application/xhtml+xml,application/xml;'
   },
 };
 
@@ -75,7 +77,7 @@ function updateCookie(set_cookes_arr){
         })
 
         Config.V2EXCK =  base64(OriCookieArr.join(';'));
-        header.headers.cookie = getCookie();
+        header.headers.Cookie = getCookie();
         if(cookieChange){
             tool.saveConfig();
         }
