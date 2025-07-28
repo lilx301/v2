@@ -3,6 +3,11 @@
  之前有个github action仓库的，被封禁了，所以采用gitlab
  > 此处代码是 ci 自动备份push 过来的。
 
+## 支持的功能
+- V2EX 每日签到
+- NodeSeek 每日签到
+- 其他自定义签到任务
+
 # 操作步骤
 ## Step 1 Clone 此仓库,别用 Fork
 ```
@@ -31,6 +36,7 @@ config-dont-push.json 文件内容
   "github": "你的repo地址",回写更新的cookie,同时备份到github
   "TGBOT": "你的tgbot提醒 没有就去掉此字段， https://api.telegram.org/bot:xxxxx/sendMessage?chat_id=xxxx",
   "V2EXCK": "你的 v2ex cookie",
+  "NodeSeekCookie": "你的 nodeseek cookie (base64编码)"
 }
 ```
 
