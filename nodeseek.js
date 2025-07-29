@@ -80,7 +80,7 @@ async function daily() {
     // 成功或失败都跳出重试循环
     
   } catch (err) {
-    console.log(`NodeSeek 签到错误:`, err);
+    // console.log(`NodeSeek 签到错误:`, err);
     if (err.response) {
       console.log(`状态码: ${err.response.status}`);
       console.log(`响应数据:`, err.response.data);
