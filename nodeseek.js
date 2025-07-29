@@ -47,7 +47,7 @@ async function daily() {
     const url = 'https://www.nodeseek.com/api/attendance?random=true';
     
     
-    const response = await axios.get(url, {
+    const response = await axios.post(url, {}, {
       timeout: 6000, // 修正超时配置
       httpsAgent: httpsAgent,
       headers: {
@@ -80,12 +80,7 @@ async function daily() {
     // 成功或失败都跳出重试循环
     
   } catch (err) {
-    // console.log(`NodeSeek 签到错误:`, err);
-    if (err.response) {
-      console.log(`状态码: ${err.response.status}`);
-      console.log(`响应数据:`, err.response.data);
-    }
-    notice += `NodeSeek 签到异常: ${err.message}\n`;
+    console.log(`NodeSeek 签到错误:`, err.message);
   }
 }
 
