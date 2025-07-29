@@ -36,21 +36,7 @@ signstatus = 0;
 // tmpHours = time.getHours();time.setHours(tmpHours + 8);
 
 let beijin = new Date(new Date().getTime() + 480 * 60 * 1000);
-notice = ''
-const header = {
-  timeout: 6000,
-  httpsAgent: httpsAgent,
-  withCredentials: true,
-  headers: {
-    Referer: "https://www.v2ex.com/mission",
-    // Host: "www.v2ex.com",
-    "user-agent":
-      "Mozilla/5.0 (Linux; Android 10; Redmi K30) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.83 Mobile Safari/537.36",
-    Cookie: `${cookie}`,
-
-    Accept:'text/html,application/xhtml+xml,application/xml;'
-  },
-};
+notice = '' 
 
  
 
@@ -61,8 +47,8 @@ async function daily() {
     const url = 'https://www.nodeseek.com/api/attendance?random=true';
     
     
-    const response = await axios.get(url, null, {
-      timeout: 10000, // 增加超时时间
+    const response = await axios.get(url, {
+      timeout: 6000, // 修正超时配置
       httpsAgent: httpsAgent,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:141.0) Gecko/20100101 Firefox/141.0',
@@ -94,10 +80,12 @@ async function daily() {
     // 成功或失败都跳出重试循环
     
   } catch (err) {
-
-    console.log(`NodeSeek 签到错误  :`, err.message);
-    
-    
+    console.log(`NodeSeek 签到错误:`, err);
+    if (err.response) {
+      console.log(`状态码: ${err.response.status}`);
+      console.log(`响应数据:`, err.response.data);
+    }
+    notice += `NodeSeek 签到异常: ${err.message}\n`;
   }
 }
 
