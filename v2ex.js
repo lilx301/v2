@@ -10,7 +10,7 @@ if (process.argv[2] == "1") {
   const proxyHost = "127.0.0.1",
     proxyPort = "1086";
   // the full socks5 address
-  const proxyOptions = `socks5://${proxyHost}:${proxyPort}`;
+  const proxyOptions = `socks5h://${proxyHost}:${proxyPort}`;
   httpsAgent = new SocksProxyAgent(proxyOptions);
   console.log("proxy:", proxyOptions);
 }

@@ -5,13 +5,12 @@ const tool = require("./tool.js");
 var httpsAgent = undefined;
 console.log(process.argv);
 if (process.argv[2] == "1") {
-  // 只在需要代理时才禁用证书验证
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   const SocksProxyAgent = require("socks-proxy-agent"); // replace with your proxy's hostname and port
   const proxyHost = "127.0.0.1",
     proxyPort = "1086";
   // the full socks5 address
-  const proxyOptions = `socks5://${proxyHost}:${proxyPort}`;
+  const proxyOptions = `socks5h://${proxyHost}:${proxyPort}`;
   httpsAgent = new SocksProxyAgent(proxyOptions);
   console.log("proxy:", proxyOptions);
 }
@@ -50,10 +49,14 @@ async function daily() {
     const response = await axios.post(url, {}, {
       timeout: 6000, // 修正超时配置
       httpsAgent: httpsAgent,
+      validateStatus: function (status) {
+        // 所有状态码都当作成功处理
+        return true;
+      },
       headers: {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:141.0) Gecko/20100101 Firefox/141.0',
         'Accept-Language': 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
-        'Accept-Encoding': 'gzip, deflate, br, zstd',
+        'Accept-Encoding': 'gzip, deflate, zstd',
         'Referer': 'https://www.nodeseek.com/board',
         'Origin': 'https://www.nodeseek.com',
         'Sec-Fetch-Dest': 'empty',
@@ -65,7 +68,8 @@ async function daily() {
     });
 
     // console.log('NodeSeek 签到响应:', response.status, response.data);
-    
+    const contentType = response.headers['content-type'] || '';
+
     if (response.status === 200) {
       if (response.data && response.data.success) {
         notice += "NodeSeek 签到成功\n";
@@ -74,13 +78,13 @@ async function daily() {
         notice += "NodeSeek 签到失败\n";
       }
     } else {
-      notice += `NodeSeek 签到失败，状态码: ${response.status}\n`;
+      notice += `N状态码: ${response.status} --${contentType}-- ${JSON.stringify(response.headers,null, 4)} }  ${response.data}\n`;
     }
     
     // 成功或失败都跳出重试循环
     
   } catch (err) {
-    console.log(`NodeSeek 签到错误:`, err.message);
+    console.log(`NodeSeek 签到错误`);
   }
 }
 
@@ -101,12 +105,10 @@ async function sign() {
     await daily();
     
     console.log(notice);
-    if((new Date).getDate() == 21){
-      // await qmsg(notice);
-    }
+   
     
   } catch (err) {
-    console.log("NodeSeek 签到主函数错误:", err);
+    console.log("NodeSeek 签到主函数错误");
   }
 }
  
