@@ -1,8 +1,6 @@
 node t0.js
 echo "\n\n-----------------v2ex.js----------------";
 node v2ex.js
-echo "\n\n-----------------nodeseek.js----------------";
-node nodeseek.js
 # echo "\n\n-----------------pgy.js----------------";
 # node pgy.js
 echo "\n\n-----------------sign2.js----------------";
