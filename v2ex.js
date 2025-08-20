@@ -1,5 +1,10 @@
-const axios = require("axios");
+
 const tool = require("./tool.js");
+const AX = require("./axiosWithDecompress.js");
+const  axios = AX.axiosWithDecompress
+
+ 
+
 
 // create the socksAgent for axios
 var httpsAgent = undefined;
@@ -20,12 +25,8 @@ const Config = tool.getConfig() || process.env;
 function base64(s){
   return Buffer.from(s,'utf-8').toString('base64')
 }
+ 
 
-function getCookie(){
-  const cookieB64 = Config.V2EXCK;
-  return Buffer.from(cookieB64,'base64').toString('utf-8')
-}
-const cookie = getCookie()
 const fs = require("fs");
 
 once = null;
@@ -41,24 +42,25 @@ const header = {
   httpsAgent: httpsAgent,
   withCredentials: true,
   headers: {
-    Referer: "https://www.v2ex.com/mission",
-    // Host: "www.v2ex.com",
-    "user-agent":
-      "Mozilla/5.0 (Linux; Android 10; Redmi K30) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.83 Mobile Safari/537.36",
-    Cookie: `${cookie}`,
-
-    Accept:'text/html,application/xhtml+xml,application/xml;'
+    
   },
 };
+let headerCFG = Config.V2EXCK;
+var cfgHead  = headerCFG.requestHeaders.headers.reduce((prev,curr)=>{
+    prev[curr.name] = curr.value;
+    return prev;
+},{});
 
+header.headers = cfgHead
+ 
 function updateCookie(set_cookes_arr){
-    var OriCookieArr =  getCookie().split(';')
+  
+    var OriCookieArr =  cfgHead.Cookie.split(';')
     if(set_cookes_arr){
         var cookieChange = false;
         set_cookes_arr.map(e=>{
             var key = e.split('=')[0];
             if (/V2EX_LANG/.test(key)) {
-                console.log('333');
                 return;
             }
             for (let index = 0; index < OriCookieArr.length; index++) {
@@ -76,10 +78,15 @@ function updateCookie(set_cookes_arr){
          
         })
 
-        Config.V2EXCK =  base64(OriCookieArr.join(';'));
-        header.headers.Cookie = getCookie();
+        newCookie =  base64(OriCookieArr.join(';'));
         if(cookieChange){
-            tool.saveConfig();
+          headerCFG.requestHeaders.headers.map(e=>{
+            if(e.name == 'Cookie'){
+              e.value = newCookie;
+            }
+          })
+
+          tool.saveConfig();
         }
         
     }
@@ -95,7 +102,7 @@ async function check() {
       updateCookie(res.headers['set-cookie']);
       reg1 = /需要先登录/;
       if (reg1.test(res.data)) {
-        console.log("cookie失效1");
+        console.log("cookie失效1\n",res.headers);
         ckstatus = 0;
         notice += "cookie失效2";
       } else {
@@ -141,11 +148,12 @@ function balance() {
     try {
       let url = "https://www.v2ex.com/balance";
       let res = await axios.get(url, header);
+      console.log(res.data);
       reg = /\d+?\s的每日登录奖励\s\d+\s铜币/;
       console.log(res.data.match(reg)[0]);
       notice += res.data.match(reg)[0];
     } catch (err) {
-      console.log("Error 93");
+      console.log("Error 93",err);
     }
     resolve();
   });
@@ -156,7 +164,7 @@ function balance() {
 
 async function sign() {
   try {
-    if (!cookie) {
+    if (!header.headers.Cookie) {
       console.log("你的cookie呢！！！");
       await qmsg("你的cookie呢！！！");
       return;
@@ -180,7 +188,7 @@ async function sign() {
     }
     
   } catch (err) {
-    console.log("Err183");
+    console.log("Err183",err);
   }
 }
 
