@@ -102,7 +102,7 @@ async function check() {
       updateCookie(res.headers['set-cookie']);
       reg1 = /需要先登录/;
       if (reg1.test(res.data)) {
-        console.log("cookie失效1\n",res.headers);
+        console.log("cookie失效1\n");
         ckstatus = 0;
         notice += "cookie失效2";
       } else {
@@ -148,12 +148,11 @@ function balance() {
     try {
       let url = "https://www.v2ex.com/balance";
       let res = await axios.get(url, header);
-      console.log(res.data);
       reg = /\d+?\s的每日登录奖励\s\d+\s铜币/;
       console.log(res.data.match(reg)[0]);
       notice += res.data.match(reg)[0];
     } catch (err) {
-      console.log("Error 93",err);
+      console.log("Error 93");
     }
     resolve();
   });
