@@ -122,7 +122,7 @@ async function check() {
 
 }
 async function qmsg(msg){
-  await tool.qmsg(msg);
+ 
 }
 //每日签到
 async function daily() {

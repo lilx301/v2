@@ -179,13 +179,15 @@ async function race(arr){
     } catch (error) {
     }
 }
+ 
 
 async function qmsg(msg) {
-    return
+ 
     const Config = getConfig() || process.env;
 
     msg += `\n\n${beijingTime()}`
     if(Config.bark){
+        
         var barkurl = `${Config.bark}${encodeURIComponent(msg)}`
         try {
             let res = await axios.get(barkurl);
@@ -231,7 +233,7 @@ async function qmsg(msg) {
             reject("1");
           }
         } catch (err) {
-          console.log("ERR 134",err);
+        
         }
         resolve(1);
       });

@@ -9,3 +9,5 @@ secretFiles/*
 tmp
 tmp/*
 test.js
+001-dev-doc
+001-dev-doc/**
