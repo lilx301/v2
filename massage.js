@@ -53,6 +53,7 @@ async function task () {
 
   let v1 = await kvtool.getValue(KVKEY)
   let v2 = await kvtool.getValue(KVKEY2)
+  console.log(v1,v2)
 
 
 
