@@ -76,11 +76,26 @@ async function task () {
   }
   
 
- 
+  // 检查今天是否已查询过
+  const PREQUERY_KEY = 'PreQueryTime'
+  let preQueryTime = await kvtool.getValue(PREQUERY_KEY)
+  let nowTime = tool.beijingTime()
+  if(preQueryTime){
+    let preQueryDate = preQueryTime.substring(0,10)
+    let nowDate = nowTime.substring(0,10)
+    console.log(preQueryDate,nowDate)
+    if(nowDate == preQueryDate){
+      console.log("SKIP4: 今日已查询")
+      return
+    }
+  }
 
   let a = await fetch(Config.feishu[0], Config.feishu[1]);
 
   let b =  await a.json();
+  
+  // 更新查询时间为当前时间
+  await kvtool.setValue(PREQUERY_KEY, nowTime)
  
   let R = []
   findValues(b, 'fldh6bCVIu', R );
