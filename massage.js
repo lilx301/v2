@@ -82,14 +82,18 @@ async function task () {
 
   let t1 = T[0];
   if(t1 && R.length){
-    console.log(t1,v1)
-    if(t1 == v1){
-      console.log("SKIP2")
-      return
-    }
+    
     let t = new Date(t1)
     /// beijingTime 
     let beijingTime = new Date(t.getTime() + 8 * 3600000).toISOString().replace(/T|Z/g," ");
+
+
+    console.log('beijingTime',beijingTime,'v1',v1)
+    if(beijingTime == v1){
+      console.log("SKIP2")
+      return
+    }
+
     await kvtool.setValue(KVKEY,beijingTime )
     await kvtool.setValue(KVKEY2,JSON.stringify(R,null,4) )
 
