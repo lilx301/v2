@@ -58,10 +58,10 @@ async function task () {
 
 
   if(v1 && v2){
-    v1 = v1.substring(0,7)
-    let now = tool.beijingTime().substring(0,7)
-    console.log(v1,now)
-    if(now == v1){
+    let v11 = v1.substring(0,7)
+    let now1 = tool.beijingTime().substring(0,7)
+    console.log(v11,now1)
+    if(now1 == v11){
       console.log("SKIP")
       return
     }
