@@ -53,7 +53,7 @@ async function task () {
 
   let v1 = await kvtool.getValue(KVKEY)
   let v2 = await kvtool.getValue(KVKEY2)
-  console.log(v1,v2)
+  console.log(v1)
 
 
 
@@ -82,8 +82,9 @@ async function task () {
 
   let t1 = T[0];
   if(t1 && R.length){
+    console.log(t1,v1)
     if(t1 == v1){
-      console.log("SKIP")
+      console.log("SKIP2")
       return
     }
     let t = new Date(t1)
