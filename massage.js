@@ -82,6 +82,10 @@ async function task () {
 
   let t1 = T[0];
   if(t1 && R.length){
+    if(t1 == v1){
+      console.log("SKIP")
+      return
+    }
     let t = new Date(t1)
     /// beijingTime 
     let beijingTime = new Date(t.getTime() + 8 * 3600000).toISOString().replace(/T|Z/g," ");
