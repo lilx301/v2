@@ -50,10 +50,10 @@ function findValues(obj, keyName,outArr ){
 async function task () {
   /// 2天检查一次
 
-  if(new Date().getDate() % 2 != 1 ){
-    console.log("SKIP3")
-    return  
-  }
+  // if(new Date().getDate() % 2 != 1 ){
+  //   console.log("SKIP3")
+  //   return  
+  // }
 
 
   const KVKEY = 'MassageTimeKey'
