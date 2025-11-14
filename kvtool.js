@@ -44,13 +44,30 @@ async function kvRequest({ kvtype, key, value }) {
   const sign = computeSign({ kvtype, key, value, timeStr, preBits: 12 });
   key = '' + key
   const body = { kvtype, key, value: value ?? '', time: timeStr, sign };
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return await res.json();
+  
+  // 创建 AbortController 用于超时控制
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000); // 30秒超时
+  
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: controller.signal, // 添加超时信号
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (error) {
+    // 处理超时错误
+    if (error.name === 'AbortError') {
+      throw new Error('请求超时（30秒）');
+    }
+    throw error;
+  } finally {
+    // 清理定时器
+    clearTimeout(timeoutId);
+  }
 }
 
 async function setValue(key,value){
@@ -66,13 +83,14 @@ async function getValue(key){
   try {
     let kvtype = 'get'
     let res = await kvRequest({kvtype,key })
+    console.log('res',res)
     if(res && res.code == 0 ){
       return res.data
     }
    
     return null
   } catch (error) {
-    
+     console.log('error',error)
   }
   return null
   
