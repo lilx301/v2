@@ -56,6 +56,7 @@ async function kvRequest({ kvtype, key, value }) {
       body: JSON.stringify(body),
       signal: controller.signal, // 添加超时信号
     });
+    console.log(API_URL)
     console.log('res',res)
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
