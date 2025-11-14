@@ -56,8 +56,6 @@ async function kvRequest({ kvtype, key, value }) {
       body: JSON.stringify(body),
       signal: controller.signal, // 添加超时信号
     });
-    console.log(API_URL)
-    console.log('res',res)
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
   } catch (error) {
@@ -85,7 +83,6 @@ async function getValue(key){
   try {
     let kvtype = 'get'
     let res = await kvRequest({kvtype,key })
-    console.log('res',res)
     if(res && res.code == 0 ){
       return res.data
     }
