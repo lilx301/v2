@@ -47,7 +47,7 @@ function findValues(obj, keyName,outArr ){
   return outArr;
 }
  
-async function task () {
+async function task (key) {
   /// 2天检查一次
 
   // if(new Date().getDate() % 2 != 1 ){
@@ -56,8 +56,8 @@ async function task () {
   // }
 
 
-  const KVKEY = 'MassageTimeKey'
-  const KVKEY2 = 'MassageValues'
+  const KVKEY = 'MassageTimeKey' + key
+  const KVKEY2 = 'MassageValues' + key
 
   let v1 = await kvtool.getValue(KVKEY)
   let v2 = await kvtool.getValue(KVKEY2)
@@ -78,7 +78,7 @@ async function task () {
   
 
   // 检查今天是否已查询过
-  const PREQUERY_KEY = 'PreQueryTime'
+  const PREQUERY_KEY = 'PreQueryTime' + key
   let preQueryTime = await kvtool.getValue(PREQUERY_KEY)
   let nowTime = tool.beijingTime()
   if(preQueryTime){
@@ -91,7 +91,7 @@ async function task () {
     }
   }
 
-  let a = await fetch(Config.feishu[0], Config.feishu[1]);
+  let a = await fetch(Config[key][0], Config[key][1]);
 
   let b =  await a.json();
   
@@ -132,7 +132,8 @@ async function task () {
 
 !(async function () {
   var timecount = tool.wait(60 * 6);
-  await Promise.race([task(), timecount]);
+  let all = Promise.all([task('feishu'),task('feishu2')])
+  await Promise.race([all, timecount]);
   console.log("finish");
   process.exit(0);
 })();
