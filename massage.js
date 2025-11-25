@@ -132,7 +132,7 @@ async function task (key) {
 
 !(async function () {
   var timecount = tool.wait(60 * 6);
-  let all = Promise.all([task('feishu'),task('feishu_ZSB')])
+  let all = Promise.all([task('feishu_LW'),task('feishu_ZSB')])
   await Promise.race([all, timecount]);
   console.log("finish");
   process.exit(0);
