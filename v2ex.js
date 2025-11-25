@@ -45,8 +45,10 @@ const header = {
     
   },
 };
-let headerCFG = Config.V2EXCK;
-var cfgHead  = headerCFG.requestHeaders.headers.reduce((prev,curr)=>{
+
+async function Task(keyName){
+  let headerCFG = Config[keyName];
+  var cfgHead  = headerCFG.requestHeaders.headers.reduce((prev,curr)=>{
     prev[curr.name] = curr.value;
     return prev;
 },{});
@@ -191,6 +193,10 @@ async function sign() {
   }
 }
 
+await sign()
+}
+
+
 console.log(`
 
 
@@ -211,7 +217,9 @@ console.log(`
 
 !(async function () {
   var timecount = tool.wait(60 * 6);
-  await Promise.race([sign(), timecount]);
+  await Promise.race([Task('V2EXCK'), timecount]);
+  await tool.wait(3)
+  await Promise.race([Task('V2EXCK2'), timecount]);
   console.log("finish");
   process.exit(0);
 })();
