@@ -101,6 +101,23 @@ async function check() {
       let url = "https://www.v2ex.com/mission/daily";
       let res = await axios.get(url, header);
 
+      
+
+
+      if (process.env.DEBUG === '1') {
+
+        let resStr = res.data || ''
+        let idx = resStr.indexOf('/member/')
+        if(idx > 0){
+          let sb = resStr.substring(idx,idx + 100);
+          sb = sb.substring(0,sb.indexOf('"'));
+          console.log(sb)
+        }else {
+        }
+      }
+
+
+
       updateCookie(res.headers['set-cookie']);
       reg1 = /需要先登录/;
       if (reg1.test(res.data)) {
@@ -218,8 +235,20 @@ console.log(`
 !(async function () {
   var timecount = tool.wait(60 * 6);
   await Promise.race([Task('V2EXCK'), timecount]);
-  console.log(`\n\n\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n\n           NEXT\n\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n\n\n`)
+
+  let line = 
+  `
+  
+  \r░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
+                 NEXT
+
+   \r░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+
+  `
+  console.log(line)
   await tool.wait(3)
+  timecount = tool.wait(60 * 6);
   await Promise.race([Task('V2EXCK2'), timecount]);
   console.log("finish");
   process.exit(0);
