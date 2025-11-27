@@ -104,7 +104,7 @@ async function check() {
       updateCookie(res.headers['set-cookie']);
       reg1 = /需要先登录/;
       if (reg1.test(res.data)) {
-        console.log("cookie失效1\n");
+        console.log("cookie失效1",keyName);
         ckstatus = 0;
         notice += "cookie失效2";
       } else {
@@ -218,6 +218,7 @@ console.log(`
 !(async function () {
   var timecount = tool.wait(60 * 6);
   await Promise.race([Task('V2EXCK'), timecount]);
+  console.log(`\n\n\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n\n           NEXT\n\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n\n\n`)
   await tool.wait(3)
   await Promise.race([Task('V2EXCK2'), timecount]);
   console.log("finish");
