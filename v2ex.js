@@ -24,6 +24,9 @@ async function Task(keyName) {
     return Buffer.from(s, "utf-8").toString("base64");
   }
 
+
+  uname  = ''
+
   once = null;
   ckstatus = 1;
   signstatus = 0;
@@ -88,13 +91,14 @@ async function Task(keyName) {
       let url = "https://www.v2ex.com/mission/daily";
       let res = await axios.get(url, header);
 
-      if (process.env.DEBUG === "1") {
+      if (1) {
         let resStr = res.data || "";
         let idx = resStr.indexOf("/member/");
         if (idx > 0) {
           let sb = resStr.substring(idx, idx + 100);
           sb = sb.substring(0, sb.indexOf('"'));
-          console.log(sb);
+          
+          uname = sb.split('/')[2] || '-';
         } else {
         }
       }
@@ -120,7 +124,10 @@ async function Task(keyName) {
       console.log("Err 56", err);
     }
   }
-  async function qmsg(msg) {}
+  async function qmsg(msg) {
+    await tool.qmsg(`${uname}\n${msg}`);
+  
+  }
   //每日签到
   async function daily() {
     try {
@@ -178,8 +185,8 @@ async function Task(keyName) {
       } else {
       }
       console.log(notice);
-      if (new Date().getDate() == 21) {
-        // await qmsg(notice);
+      if (new Date().getDate() % 7 == 0) {
+        await qmsg(notice);
       }
     } catch (err) {
       console.log("Err183", err);
