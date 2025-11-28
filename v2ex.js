@@ -1,10 +1,7 @@
-
 const tool = require("./tool.js");
 const AX = require("./axiosWithDecompress.js");
-const  axios = AX.axiosWithDecompress
-
- 
-
+const axios = AX.axiosWithDecompress;
+const fs = require("fs");
 
 // create the socksAgent for axios
 var httpsAgent = undefined;
@@ -20,108 +17,92 @@ if (process.argv[2] == "1") {
   console.log("proxy:", proxyOptions);
 }
 
-const Config = tool.getConfig() || process.env;
+async function Task(keyName) {
+  const Config = tool.getConfig() || process.env;
 
-function base64(s){
-  return Buffer.from(s,'utf-8').toString('base64')
-}
- 
+  function base64(s) {
+    return Buffer.from(s, "utf-8").toString("base64");
+  }
 
-const fs = require("fs");
-async function Task(keyName){
-once = null;
-ckstatus = 1;
-signstatus = 0;
-// time = new Date();
-// tmpHours = time.getHours();time.setHours(tmpHours + 8);
+  once = null;
+  ckstatus = 1;
+  signstatus = 0;
+  // time = new Date();
+  // tmpHours = time.getHours();time.setHours(tmpHours + 8);
 
-let beijin = new Date(new Date().getTime() + 480 * 60 * 1000);
-notice = ''
-const header = {
-  timeout: 6000,
-  httpsAgent: httpsAgent,
-  withCredentials: true,
-  headers: {
-    
-  },
-};
-
+  let beijin = new Date(new Date().getTime() + 480 * 60 * 1000);
+  notice = "";
+  const header = {
+    timeout: 6000,
+    httpsAgent: httpsAgent,
+    withCredentials: true,
+    headers: {},
+  };
 
   let headerCFG = Config[keyName];
-  var cfgHead  = headerCFG.requestHeaders.headers.reduce((prev,curr)=>{
+  var cfgHead = headerCFG.requestHeaders.headers.reduce((prev, curr) => {
     prev[curr.name] = curr.value;
     return prev;
-},{});
+  }, {});
 
-header.headers = cfgHead
- 
-function updateCookie(set_cookes_arr){
-  
-    var OriCookieArr =  cfgHead.Cookie.split(';')
-    if(set_cookes_arr){
-        var cookieChange = false;
-        set_cookes_arr.map(e=>{
-            var key = e.split('=')[0];
-            if (/V2EX_LANG/.test(key)) {
-                return;
-            }
-            for (let index = 0; index < OriCookieArr.length; index++) {
-                const e2 = OriCookieArr[index];
-                var key2 = e2.split('=')[0];
-                key2 = key2.replace(/^ */,'');
-                if (key2 == key) {
-                    console.log('update cookie',key);
-                    OriCookieArr[index] = e.split(';')[0];
-                    cookieChange = true;
-                    break;
-                }
-                
-            }
-         
-        })
+  header.headers = cfgHead;
 
-        newCookie =  base64(OriCookieArr.join(';'));
-        if(cookieChange){
-          headerCFG.requestHeaders.headers.map(e=>{
-            if(e.name == 'Cookie'){
-              e.value = newCookie;
-            }
-          })
-
-          tool.saveConfig();
+  function updateCookie(set_cookes_arr) {
+    var OriCookieArr = cfgHead.Cookie.split(";");
+    if (set_cookes_arr) {
+      var cookieChange = false;
+      set_cookes_arr.map((e) => {
+        var key = e.split("=")[0];
+        if (/V2EX_LANG/.test(key)) {
+          return;
         }
-        
-    }
-}
+        for (let index = 0; index < OriCookieArr.length; index++) {
+          const e2 = OriCookieArr[index];
+          var key2 = e2.split("=")[0];
+          key2 = key2.replace(/^ */, "");
+          if (key2 == key) {
+            console.log("update cookie", key);
+            OriCookieArr[index] = e.split(";")[0];
+            cookieChange = true;
+            break;
+          }
+        }
+      });
 
-//获取once检查是否已签到
-async function check() {
-   
+      newCookie = base64(OriCookieArr.join(";"));
+      if (cookieChange) {
+        headerCFG.requestHeaders.headers.map((e) => {
+          if (e.name == "Cookie") {
+            e.value = newCookie;
+          }
+        });
+
+        tool.saveConfig();
+      }
+    }
+  }
+
+  //获取once检查是否已签到
+  async function check() {
     try {
       let url = "https://www.v2ex.com/mission/daily";
       let res = await axios.get(url, header);
 
-      
-
-
-      if (process.env.DEBUG === '1') {
-
-        let resStr = res.data || ''
-        let idx = resStr.indexOf('/member/')
-        if(idx > 0){
-          let sb = resStr.substring(idx,idx + 100);
-          sb = sb.substring(0,sb.indexOf('"'));
-          console.log(sb)
-        }else {
+      if (process.env.DEBUG === "1") {
+        let resStr = res.data || "";
+        let idx = resStr.indexOf("/member/");
+        if (idx > 0) {
+          let sb = resStr.substring(idx, idx + 100);
+          sb = sb.substring(0, sb.indexOf('"'));
+          console.log(sb);
+        } else {
         }
       }
 
-
-
-      updateCookie(res.headers['set-cookie']);
+      updateCookie(res.headers["set-cookie"]);
       reg1 = /需要先登录/;
       if (reg1.test(res.data)) {
-        console.log("cookie失效1",keyName);
+        console.log("cookie失效1", keyName);
         ckstatus = 0;
         notice += "cookie失效2";
       } else {
@@ -136,83 +117,77 @@ async function check() {
         }
       }
     } catch (err) {
-      console.log("Err 56",err);
+      console.log("Err 56", err);
     }
-
-}
-async function qmsg(msg){
- 
-}
-//每日签到
-async function daily() {
-  try {
-    let url = `https://www.v2ex.com/mission/daily/redeem?once=${once}`;
-    let res = await axios.get(url, header);
-    console.log(once);
-    reg = /已成功领取每日登录奖励/;
-    if (reg.test(res.data)) {
-      notice += "签到成功\n";
-      signstatus = 1;
-    } else {
-      notice += "签到失败\n";
-    }
-  } catch (err) {
-    console.log("Errror 76", err);
   }
-}
-
-//查询余额
-function balance() {
-  return new Promise(async (resolve) => {
+  async function qmsg(msg) {}
+  //每日签到
+  async function daily() {
     try {
-      let url = "https://www.v2ex.com/balance";
+      let url = `https://www.v2ex.com/mission/daily/redeem?once=${once}`;
       let res = await axios.get(url, header);
-      reg = /\d+?\s的每日登录奖励\s\d+\s铜币/;
-      console.log(res.data.match(reg)[0]);
-      notice += res.data.match(reg)[0];
-    } catch (err) {
-      console.log("Error 93");
-    }
-    resolve();
-  });
-}
-
-//推送结果
-
-
-async function sign() {
-  try {
-    if (!header.headers.Cookie) {
-      console.log("你的cookie呢！！！");
-      await qmsg("你的cookie呢！！！");
-      return;
-    }
-    await check();
-    if (ckstatus == 1) {
-      if (once && signstatus == 0) {
-        await daily();
-        if (signstatus == 0) {
-          //如果签到失败
-          await check();
-          await daily();
-        }
+      console.log(once);
+      reg = /已成功领取每日登录奖励/;
+      if (reg.test(res.data)) {
+        notice += "签到成功\n";
+        signstatus = 1;
+      } else {
+        notice += "签到失败\n";
       }
-      await balance();
-    } else {
+    } catch (err) {
+      console.log("Errror 76", err);
     }
-    console.log(notice);
-    if((new Date).getDate() == 21){
-      // await qmsg(notice);
-    }
-    
-  } catch (err) {
-    console.log("Err183",err);
   }
-}
 
-await sign()
-}
+  //查询余额
+  function balance() {
+    return new Promise(async (resolve) => {
+      try {
+        let url = "https://www.v2ex.com/balance";
+        let res = await axios.get(url, header);
+        reg = /\d+?\s的每日登录奖励\s\d+\s铜币/;
+        console.log(res.data.match(reg)[0]);
+        notice += res.data.match(reg)[0];
+      } catch (err) {
+        console.log("Error 93");
+      }
+      resolve();
+    });
+  }
 
+  //推送结果
+
+  async function sign() {
+    try {
+      if (!header.headers.Cookie) {
+        console.log("你的cookie呢！！！");
+        await qmsg("你的cookie呢！！！");
+        return;
+      }
+      await check();
+      if (ckstatus == 1) {
+        if (once && signstatus == 0) {
+          await daily();
+          if (signstatus == 0) {
+            //如果签到失败
+            await check();
+            await daily();
+          }
+        }
+        await balance();
+      } else {
+      }
+      console.log(notice);
+      if (new Date().getDate() == 21) {
+        // await qmsg(notice);
+      }
+    } catch (err) {
+      console.log("Err183", err);
+    }
+  }
+
+  await sign();
+}
 
 console.log(`
 
@@ -222,7 +197,7 @@ console.log(`
 **************************************************
 *
 *
-*   ${new Date(Date.now() + 8 * 3600000).toISOString().replace(/T|Z/g," ")}
+*   ${new Date(Date.now() + 8 * 3600000).toISOString().replace(/T|Z/g, " ")}
 *
 *
 **************************************************
@@ -230,14 +205,13 @@ console.log(`
 
 
 
-`)
+`);
 
 !(async function () {
   var timecount = tool.wait(60 * 6);
-  await Promise.race([Task('V2EXCK'), timecount]);
+  await Promise.race([Task("V2EXCK"), timecount]);
 
-  let line = 
-  `
+  let line = `
   
   \r░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
@@ -245,11 +219,11 @@ console.log(`
 
    \r░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-  `
-  console.log(line)
-  await tool.wait(3)
+  `;
+  console.log(line);
+  await tool.wait(3);
   timecount = tool.wait(60 * 6);
-  await Promise.race([Task('V2EXCK2'), timecount]);
+  await Promise.race([Task("V2EXCK2"), timecount]);
   console.log("finish");
   process.exit(0);
 })();
