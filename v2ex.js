@@ -28,7 +28,7 @@ function base64(s){
  
 
 const fs = require("fs");
-
+async function Task(keyName){
 once = null;
 ckstatus = 1;
 signstatus = 0;
@@ -46,7 +46,7 @@ const header = {
   },
 };
 
-async function Task(keyName){
+
   let headerCFG = Config[keyName];
   var cfgHead  = headerCFG.requestHeaders.headers.reduce((prev,curr)=>{
     prev[curr.name] = curr.value;
