@@ -55,9 +55,10 @@ async function task (key) {
   //   return  
   // }
 
-
-  const KVKEY = 'MassageTimeKey' + key
-  const KVKEY2 = 'MassageValues' + key
+  const KEY_Suffix = '1'
+  const KVKEY = 'MassageTimeKey' + KEY_Suffix + key
+  const KVKEY2 = 'MassageValues' + KEY_Suffix + key
+  const PREQUERY_KEY = 'PreQueryTime' + KEY_Suffix + key
 
   let v1 = await kvtool.getValue(KVKEY)
   let v2 = await kvtool.getValue(KVKEY2)
@@ -78,7 +79,7 @@ async function task (key) {
   
 
   // 检查今天是否已查询过
-  const PREQUERY_KEY = 'PreQueryTime' + key
+  
   let preQueryTime = await kvtool.getValue(PREQUERY_KEY)
   let nowTime = tool.beijingTime()
   if(preQueryTime){
@@ -121,7 +122,10 @@ async function task (key) {
     await kvtool.setValue(KVKEY,beijingTime )
     await kvtool.setValue(KVKEY2,JSON.stringify(R,null,4) )
 
-    await tool.qmsg(   `${key} ${beijingTime}\n\n\ ${JSON.stringify(R,null,4)}`)
+    let Rstr = R.map((item,index) => {
+      return `${(index + 1)}.  \t${item}`
+    }).join('\n')
+    await tool.qmsg(   `${key} ${beijingTime}\n\n${Rstr}`)
   }
 
   
