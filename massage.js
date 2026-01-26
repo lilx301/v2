@@ -1,7 +1,7 @@
 
 const tool = require("./tool.js");
-const AX = require("./axiosWithDecompress.js");
- 
+
+var G_Seq = 1;
  
 const kvtool = require('./kvtool.js')
 
@@ -55,7 +55,7 @@ async function task (key) {
   //   return  
   // }
 
-  const KEY_Suffix = '1'
+  const KEY_Suffix = 'A'
   const KVKEY = 'MassageTimeKey' + KEY_Suffix + key
   const KVKEY2 = 'MassageValues' + KEY_Suffix + key
   const PREQUERY_KEY = 'PreQueryTime' + KEY_Suffix + key
@@ -123,7 +123,7 @@ async function task (key) {
     await kvtool.setValue(KVKEY2,JSON.stringify(R,null,4) )
 
     let Rstr = R.map((item,index) => {
-      return `${(index + 1)}.  \t${item}`
+      return `${(G_Seq ++ )}.  \t \t${item}`
     }).join('\n')
     await tool.qmsg(   `${key} ${beijingTime}\n\n${Rstr}`)
   }
